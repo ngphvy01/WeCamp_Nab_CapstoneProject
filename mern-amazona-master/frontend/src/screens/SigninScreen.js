@@ -53,6 +53,8 @@ export default function SigninScreen() {
           <Form.Control
             type="email"
             required
+            pattern="[a-z0-9]+@[a-z]+\.[a-z]{2,3}"
+            title="Please match the required format"
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
@@ -61,6 +63,8 @@ export default function SigninScreen() {
           <Form.Control
             type="password"
             required
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+            title="Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>

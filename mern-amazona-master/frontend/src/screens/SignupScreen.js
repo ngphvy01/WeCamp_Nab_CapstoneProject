@@ -64,6 +64,7 @@ export default function SignupScreen() {
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
+            pattern="[a-z0-9]+@[a-z]+\.[a-z]{2,3}"
             required
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -72,6 +73,8 @@ export default function SignupScreen() {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+            title="Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
             required
             onChange={(e) => setPassword(e.target.value)}
           />

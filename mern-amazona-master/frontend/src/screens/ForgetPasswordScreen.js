@@ -47,6 +47,7 @@ export default function ForgetPasswordScreen() {
           <Form.Control
             type="email"
             required
+            pattern="[a-z0-9]+@[a-z]+\.[a-z]{2,3}"
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>

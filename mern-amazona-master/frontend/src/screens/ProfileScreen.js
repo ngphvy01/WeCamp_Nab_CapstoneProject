@@ -81,6 +81,7 @@ export default function ProfileScreen() {
           <Form.Control
             type="email"
             value={email}
+            pattern="[a-z0-9]+@[a-z]+\.[a-z]{2,3}"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -89,6 +90,8 @@ export default function ProfileScreen() {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+            title="Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
