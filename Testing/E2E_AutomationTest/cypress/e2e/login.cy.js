@@ -1,6 +1,6 @@
 import { loginPage } from "../pages/loginPage";
-import { homePage } from "../pages/homePage"
 import { profilePage } from "../pages/profilePage";
+import { navBar } from "../pages/navBar";
 
 describe("Sign In successfully", () => {
     beforeEach(() => {
@@ -15,7 +15,7 @@ describe("Sign In successfully", () => {
                 .typePassword(account.valid[0].password)
                 .clickLogin();
 
-            homePage
+            navBar
                 .clickNavDropDown()
                 .clickUserProfile();
 

@@ -1,6 +1,8 @@
 export const loginPage = {
     TXT_USERNAME: "#email",
     TXT_PASSWORD: "#password",
+    BTN_TOASTIFY:".Toastify button",
+    TXT_TOASTIFY:".Toastify .Toastify__toast-body div",
 
     typeUsername(username) {
         cy.get(this.TXT_USERNAME).type(username);
@@ -28,12 +30,12 @@ export const loginPage = {
     },
 
     isNotificationCorrect(){
-        cy.get('.Toastify .Toastify__toast-body div').next('div').should('have.text','Invalid email or password');
+        cy.get(this.TXT_TOASTIFY).next('div').should('have.text','Invalid email or password');
         return this;
     },
 
     clickCloseToastifyButton(){
-        cy.get('.Toastify button').click({ force: true });
+        cy.get(this.BTN_TOASTIFY).click({ force: true });
         return this;
     },
 }

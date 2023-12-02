@@ -7,6 +7,7 @@ module.exports = defineConfig({
     },
     baseUrl: 'http://localhost:3000',
     env: {
+      home:'/',
       login: '/signin',
       profile: '/profile',
     },
