@@ -1,0 +1,14 @@
+{
+  "valid": [
+    {
+      "email": "ngphvy02@gmail.com",
+      "password": "Vy123456"
+    }
+  ],
+  "invalid": [
+    {
+      "email": "ngphvy@gmail.com",
+      "password": "Vy123456"
+    }
+  ]
+}

@@ -70,26 +70,27 @@ userRouter.post(
       await user.save();
 
       //reset link
-      console.log(`${baseUrl()}/reset-password/${token}`);
+      // console.log(`${baseUrl()}/reset-password/${token}`);
 
-      mailgun()
-        .messages()
-        .send(
-          {
-            from: 'Amazona <me@mg.yourdomain.com>',
-            to: `${user.name} <${user.email}>`,
-            subject: `Reset Password`,
-            html: ` 
-             <p>Please Click the following link to reset your password:</p> 
-             <a href="${baseUrl()}/reset-password/${token}"}>Reset Password</a>
-             `,
-          },
-          (error, body) => {
-            console.log(error);
-            console.log(body);
-          }
-        );
-      res.send({ message: 'We sent reset password link to your email.' });
+      // mailgun()
+      //   .messages()
+      //   .send(
+      //     {
+      //       from: 'ngphvy02@gmail.com',
+      //       to: `${user.email}`,
+      //       subject: `Reset Password`,
+      //       html: ` 
+      //        <p>Please Click the following link to reset your password:</p> 
+      //        <a href="${baseUrl()}/reset-password/${token}"}>Reset Password</a>
+      //        `,
+      //     },
+      //     (error, body) => {
+      //       console.log(error);
+      //       console.log(body);
+      //     }
+      //   );
+      //res.send({ message: 'We sent reset password link to your email.' });
+      res.send({ message: `${token}` });
     } else {
       res.status(404).send({ message: 'User not found' });
     }
@@ -99,6 +100,7 @@ userRouter.post(
 userRouter.post(
   '/reset-password',
   expressAsyncHandler(async (req, res) => {
+    // console.log(req.body.token)
     jwt.verify(req.body.token, process.env.JWT_SECRET, async (err, decode) => {
       if (err) {
         res.status(401).send({ message: 'Invalid Token' });
@@ -184,6 +186,7 @@ userRouter.post(
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password),
     });
+    console.log(newUser);
     const user = await newUser.save();
     res.send({
       _id: user._id,
