@@ -36,6 +36,16 @@ export const navBar ={
         return this;
     },
 
+    clickGoToHome(){
+        cy.get('a').contains('amazona').click({force:true});
+        return this;
+    },
+
+    clickOrderHistory(){
+        cy.get('a').contains('Order History').click({force:true});
+        return this;
+    },
+
     isProductCountInCartCorrect(numItems){
         if (numItems >0){
             cy.get(this.TXT_CARD_COUNT).should('have.text',numItems);

@@ -1,0 +1,40 @@
+{
+    "orderItems": [
+        {
+            "slug": "nike-slim-pant",
+            "name": "Nike Slim Pant",
+            "quantity": 3,
+            "image": "/images/p3.jpg",
+            "price": 25,
+            "product": "65617973061526173a2d89ee",
+            "_id": "65617973061526173a2d89ee"
+        },
+        {
+            "slug": "adidas-fit-pant",
+            "name": "Adidas Fit Pant",
+            "quantity": 1,
+            "image": "/images/p4.jpg",
+            "price": 65,
+            "product": "65617973061526173a2d89ef",
+            "_id": "65617973061526173a2d89ef"
+        }
+    ],
+    "shippingAddress": {
+        "fullName": "Vy",
+        "address": "123 BVD",
+        "city": "hcm",
+        "postalCode": "123",
+        "country": "Vietnam"
+    },
+    "date":"2023-12-03",
+    "paymentMethod": "PayPal",
+    "itemsPrice": 140,
+    "shippingPrice": 0,
+    "taxPrice": 21,
+    "totalPrice": 161,
+    "totalItems": 4,
+    "user": {
+        "email": "ngphvy02@gmail.com",
+        "password": "Vy123456"
+    }
+}
