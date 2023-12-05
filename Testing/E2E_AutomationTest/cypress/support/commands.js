@@ -23,3 +23,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("acceptAlert", (type, msg) => {
+    cy.on(type, (txt) => {
+      expect(txt).to.contains(msg);
+      return true;
+    });
+});

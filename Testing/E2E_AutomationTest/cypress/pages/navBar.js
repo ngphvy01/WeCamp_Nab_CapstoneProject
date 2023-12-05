@@ -53,5 +53,12 @@ export const navBar ={
             cy.get(this.BTN_NAV).contains('Cart').children().should('have.length', 0);
         }
         return this;
+    },
+
+    isUserNameCorrect(name){
+        cy.get(this.BTN_NAV_DROPDOWN).should('have.text',name);
+        return this;
     }
+
+
 }

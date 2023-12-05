@@ -6,92 +6,101 @@ import { placeOrderPage } from "../pages/placeOrderPage";
 import { productDetailPage } from "../pages/productDetailPage";
 import { productListPage } from "../pages/productListPage"
 
-describe("Add To Cart successfully", () => {
+describe("Place Order Successfully", () => {
     beforeEach(() => {
-        cy.fixture("account").as("account");
+        cy.fixture("order").as("order");
         cy.visit(Cypress.env("home"));
-
     });
 
-    it("Add To Cart from Product Detail", () => {
-        cy.get("@account").then((account) => {
-            productListPage
-                .clickProduct('Nike Slim shirt');
+    it("Place order successfully", () => {
+        cy.get("@order").then((orders) => {
 
-            productDetailPage
-                .isProductDisplayCorrect('Nike Slim shirt', 11, true, 120)
-            // .clickAddToCart();
+            let order = orders.valid;
+            productListPage.addProductsToCart(order[0].orderItems);
 
-            // navBar
-            //     .isProductCountInCartCorrect(1);
+            navBar.clickViewCart();
+            cy.wait(1000);
 
-        });
-    });
+            cartPage.clickPlaceOrder();
+            cy.wait(200);
 
-    it("Add To Cart from Home", () => {
-        cy.get("@account").then((account) => {
-            productListPage
-                .clickAddProductToCart('Nike Slim shirt');
+            loginPage
+                .typeUsername(order[1].user.email)
+                .typePassword(order[1].user.password)
+                .clickLogin();
 
-            navBar
-                .isProductCountInCartCorrect(1)
-                .clickViewCart();
-        });
-    });
+            placeOrderPage
+                .inputOrder(order[0])
+                .clickEditShipping()
+                .typeShippingInfo(order[1].shippingAddress)
+                .clickBtnContinue()
+                .clickBtnContinue()
+                .clickEditPayment()
+                .clickPayment(order[1].paymentMethod)
+                .clickBtnContinue()
+                .clickEditOrderItem();
 
-    it("Add and remove from cart page", () => {
-        cy.get("@account").then((account) => {
-            let productList = [{ "productName": 'Nike Slim shirt', "productPrice": 120, "count": 2 },
-            { "productName": 'Orchid Flower Shirt', "productPrice": 65, "count": 1 }]
-            var totalPrice = 0;
-            var totalProduct = 0;
-            for (let index = 0; index < productList.length; index++) {
-                const product = productList[index];
-                totalProduct = totalProduct + product.count;
-                totalPrice = totalPrice + product.count * product.productPrice;
-                for (let i = 0; i < product.count; i++) {
-                    productListPage
-                        .clickAddProductToCart(product.productName);
-                    cy.wait(1000);
-                }
+            for (let index = 0; index < order[0].orderItems.length; index++) {
+                const product = order[0].orderItems[index];
+
+                cartPage.clickAddProduct(product.name);
+                cy.wait(500);
             }
 
-            navBar
-                .isProductCountInCartCorrect(totalProduct)
-                .clickViewCart();
-            cy.wait(1000);
+            cartPage.clickPlaceOrder();
+            placeOrderPage
+                .clickBtnContinue()
+                .clickBtnContinue()
+                .isOrderCorrect(order[1])
+                .clickPlaceOrderBtn()
+                .isOrderCorrect(order[1]);
 
-            for (let index = 0; index < productList.length; index++) {
-                const product = productList[index];
-                cartPage
-                    .isProductAddedCorrect(product);
-            }
+            cy.get('h1').then(($e) => {
+                let orderId= $e.text();
+                orderId = orderId.replace('Order ','');
+                cy.log(orderId);
 
-            cartPage
-                //     .clickRemoveProduct('Nike Slim shirt')
-                //     .clickAddProduct('Nike Slim shirt')
-                //     .clickDeleteProductByName('Nike Slim shirt');
-                .isTotalCountCorrect(totalProduct, totalPrice);
+                navBar
+                    .clickNavDropDown()
+                    .clickOrderHistory();
+
+                orderHistoryPage
+                    .isOrderDisplayedCorrectly(orderId, order[1])
+                    .clickViewOrderDetail(orderId);
+                
+                cy.wait(500);
+
+                orderDetailPage.isOrderIdCorrect(orderId);
+                placeOrderPage.isOrderCorrect(order[1]);
+
+            });
+        });
+    });
+});
+
+
+describe("Can not place order", () => {
+    beforeEach(() => {
+        cy.fixture("order").as("order");
+        cy.visit(Cypress.env("home"));
+        cy.get("@order").then((order) => {
+            navBar.clickSignIn();
+            loginPage
+                .typeUsername(order.invalid.user.email)
+                .typePassword(order.invalid.user.password)
+                .clickLogin();
+            cy.wait(500);
 
         });
     });
 
-
-    it("Can not place order with empty cart", () => {
-        cy.get("@account").then((account) => {
+    it.only("Can not place order with empty cart", () => {
+        cy.get("@order").then((order) => {
             productListPage
                 .clickAddProductToCart('Nike Slim shirt');
-            cy.wait(1000);
-            productListPage
-                .clickAddProductToCart('Nike Slim shirt');
-            cy.wait(1000);
-            productListPage
-                .clickAddProductToCart('Orchid Flower Shirt');
 
-            navBar
-                .isProductCountInCartCorrect(3)
-                .clickViewCart();
-            cy.wait(1000);
+            navBar.clickViewCart();
+            cy.wait(500);
 
             cartPage
                 .clickDeleteAllProduct()
@@ -100,20 +109,26 @@ describe("Add To Cart successfully", () => {
         });
     });
 
-    it("Out of stock", () => {
-        cy.get("@account").then((account) => {
-            productListPage
-                .clickProduct('Adidas Fit Shirt');
+    const order = require('../fixtures/order.json');
+    const invalidOrder = order.invalid.shippingAddress;
 
-            productDetailPage
-                .isProductDisplayCorrect('Adidas Fit Shirt', 0, false, 250)
-                .isAddToCartBtnNotExist();
-
+    invalidOrder.forEach((data) => {
+        it.only(data.testName, () => {
+                productListPage
+                    .clickAddProductToCart('Nike Slim shirt');
+    
+                navBar.clickViewCart();
+                cy.wait(500);
+    
+                cartPage.clickPlaceOrder();
+                placeOrderPage
+                    .typeShippingInfo(data)
+                    .clickBtnContinue()
+                    .checkErrorMessage(data.error.errorMessage,data.error.errorField);  
         });
     });
-
-
 });
+
 
 describe("Review successfully", () => {
     beforeEach(() => {
@@ -142,72 +157,6 @@ describe("Review successfully", () => {
                 .typeReview('nice')
                 .clickSubmitReview()
                 .isReviewCorrect();
-
-        });
-    });
-});
-
-
-describe("Place order", () => {
-    beforeEach(() => {
-        cy.fixture("order").as("order");
-        cy.visit(Cypress.env("home"));
-    });
-
-    it.only("Place order successfully", () => {
-        cy.get("@order").then((order) => {
-
-            productListPage.addProductsToCart(order.orderItems);
-
-            navBar
-                .isProductCountInCartCorrect(order.totalItems)
-                .clickViewCart();
-
-            cy.wait(1000);
-
-            for (let index = 0; index < order.orderItems.length; index++) {
-                cartPage.isProductAddedCorrect(order.orderItems[index]);
-            }
-
-            cartPage
-                .isTotalCountCorrect(order.totalItems, order.itemsPrice)
-                .clickPlaceOrder();
-
-            loginPage
-                .typeUsername(order.user.email)
-                .typePassword(order.user.password)
-                .clickLogin();
-            
-            placeOrderPage
-                .inputOrder(order)
-                .clickPlaceOrderBtn();
-
-
-        });
-    });
-
-    it("View order history", () => {
-        cy.get("@order").then((order) => {
-            navBar.clickSignIn();
-
-            loginPage
-                .typeUsername(order.user.email)
-                .typePassword(order.user.password)
-                .clickLogin();
-
-            navBar.clickNavDropDown()
-            .clickOrderHistory();
-
-            orderHistoryPage
-            .isOrderDisplayedCorrectly('656c9651fa31af28deb533cb',order)
-            .clickViewOrderDetail('656c9651fa31af28deb533cb');
-
-            orderDetailPage
-            .isOrderIdCorrect('656c9651fa31af28deb533cb');
-            placeOrderPage.isOrderCorrect(order);
-
-            
-
 
         });
     });

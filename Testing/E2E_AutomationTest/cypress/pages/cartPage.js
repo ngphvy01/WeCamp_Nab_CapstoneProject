@@ -45,6 +45,12 @@ export const cartPage = {
         return this;
     },
 
+    isProductOutOfStock(productName){
+        cy.get('a').contains(productName).parent().parent().find('[class="fas fa-plus-circle"]')
+            .parent().should('be.disabled');
+        return this;
+    },
+
     isTotalCountCorrect(numItems, totalPrice) {
         //Verify total product count in cart
         //Verify total price
@@ -64,11 +70,11 @@ export const cartPage = {
         return this;
     },
 
-    isProductAddedCorrect(product) {
+    isProductAddedCorrect(product,quantity) {
         // Verify name
         cy.get('.list-group').first().find('a').contains(product.name).should('have.length', 1);
         // Verify count
-        cy.get('.list-group').first().find('a').contains(product.name).parent().next().children('span').should('have.text', product.quantity);
+        cy.get('.list-group').first().find('a').contains(product.name).parent().next().children('span').should('have.text', quantity);
         // Verify price
         cy.get('.list-group').first().find('a').contains(product.name).parent().next().next().should('have.text', "$" + product.price);
 

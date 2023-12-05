@@ -1,0 +1,109 @@
+{
+    "valid": {
+        "name": "Vy",
+        "email": "pvy@gmail.com",
+        "password": "Vy123456",
+        "confirmPassword": "Vy123456"
+    },
+    "invalid": [
+        {
+            "testName": "Empty field",
+            "name": "",
+            "email": "",
+            "password": "",
+            "confirmPassword": "",
+            "error": {
+                "errorField": "name",
+                "errorMessage": "Please fill out this field"
+            }
+        },
+        {
+            "testName": "Existed Email",
+            "name": "Vy",
+            "email": "ngphvy02@gmail.com",
+            "password": "Vy123456",
+            "confirmPassword": "Vy123456",
+            "error": {
+                "errorField": "toastify",
+                "errorMessage": "duplicate key error"
+            }
+        },
+        {
+            "testName": "Invalid Email: missing @",
+            "name": "Vy",
+            "email": "ngphvy02gmail.com",
+            "password": "Vy123456",
+            "confirmPassword": "Vy123456",
+            "error": {
+                "errorField": "email",
+                "errorMessage": "Please include an '@' in the email address."
+            }
+        },
+        {
+            "testName": "Invalid Email: missing .com",
+            "name": "Vy",
+            "email": "ngphvy02@gmail",
+            "password": "Vy123456",
+            "confirmPassword": "Vy123456",
+            "error": {
+                "errorField": "email",
+                "errorMessage": "Please match the requested format."
+            }
+        },
+        {
+            "testName": "Invalid Email: missing path",
+            "name": "Vy",
+            "email": "ngphvy02@",
+            "password": "Vy123456",
+            "confirmPassword": "Vy123456",
+            "error": {
+                "errorField": "email",
+                "errorMessage": "Please enter a part following '@'."
+            }
+        },
+        {
+            "testName": "Invalid password: not have required length",
+            "name": "Vy",
+            "email": "ngphvy@gmail.com",
+            "password": "nmai1",
+            "confirmPassword": "nmai1",
+            "error": {
+                "errorField": "password",
+                "errorMessage": "Please match the requested format."
+            }
+        },
+        {
+            "testName": "Invalid password: not contain number",
+            "name": "Vy",
+            "email": "ngphvy@gmail.com",
+            "password": "ngocmai",
+            "confirmPassword": "ngocmai",
+            "error": {
+                "errorField": "password",
+                "errorMessage": "Please match the requested format."
+            }
+        },
+        {
+            "testName": "Invalid password: not have uppercase",
+            "name": "Vy",
+            "email": "ngphvy@gmail.com",
+            "password": "ngocmai1907",
+            "confirmPassword": "ngocmai1907",
+            "error": {
+                "errorField": "password",
+                "errorMessage": "Please match the requested format."
+            }
+        },
+        {
+            "testName": "Password does not match Confirm Password",
+            "name": "Vy",
+            "email": "ngphvy@gmail.com",
+            "password": "Ngocmai19",
+            "confirmPassword": "Ngocmai19078",
+            "error": {
+                "errorField": "toastify",
+                "errorMessage": "Passwords do not match"
+            }
+        }
+    ]
+}

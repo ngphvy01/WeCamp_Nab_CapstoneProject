@@ -2,7 +2,7 @@ export const loginPage = {
     TXT_USERNAME: "#email",
     TXT_PASSWORD: "#password",
     BTN_TOASTIFY:".Toastify button",
-    TXT_TOASTIFY:".Toastify .Toastify__toast-body div",
+    TXT_TOASTIFY:".Toastify .Toastify__toast-body div+div",
 
     typeUsername(username) {
         cy.get(this.TXT_USERNAME).type(username);
@@ -11,6 +11,16 @@ export const loginPage = {
 
     typePassword(password) {
         cy.get(this.TXT_PASSWORD).type(password);
+        return this;
+    },
+
+    inputSignIn(email, password) {
+        if (email != "") {
+            this.typeUsername(email);
+        }
+        if (password != "") {
+            this.typePassword(password);
+        }
         return this;
     },
 
@@ -29,8 +39,8 @@ export const loginPage = {
         return this;
     },
 
-    isNotificationCorrect(){
-        cy.get(this.TXT_TOASTIFY).next('div').should('have.text','Invalid email or password');
+    isNotificationCorrect(error) {
+        cy.get(this.TXT_TOASTIFY).contains(error).should('have.length', 1);
         return this;
     },
 
@@ -38,4 +48,17 @@ export const loginPage = {
         cy.get(this.BTN_TOASTIFY).click({ force: true });
         return this;
     },
+    
+    checkErrorMessage(error,field){
+        let check_field = this.TXT_USERNAME;
+        if (field == "password") {
+            check_field = this.TXT_PASSWORD;
+        }
+
+        cy.get(check_field).then(($input) => {
+            expect($input[0].validationMessage).to.contains(error);
+        })
+        
+        return this;
+    }
 }

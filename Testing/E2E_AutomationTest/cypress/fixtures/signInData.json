@@ -1,0 +1,72 @@
+{
+  "valid": {
+    "name": "vy",
+    "email": "ngphvy02@gmail.com",
+    "password": "Vy123456"
+  },
+  "invalid": [
+    {
+      "testName": "Empty field",
+      "email": "",
+      "password": "",
+      "error": {
+        "errorField": "email",
+        "errorMessage": "Please fill out this field"
+      }
+    },
+    {
+      "testName": "Empty password",
+      "email": "ngphvy02@gmail.com",
+      "password": "",
+      "error": {
+        "errorField": "password",
+        "errorMessage": "Please fill out this field"
+      }
+    },
+    {
+      "testName": "Non-existed account",
+      "email": "thutrang1961@gmail.com",
+      "password": "Ngocmai1907",
+      "error": {
+        "errorField": "toastify",
+        "errorMessage": "Invalid email or password"
+      }
+    },
+    {
+      "testName": "Incorrect Password",
+      "email": "ngphvy02@gmail.com",
+      "password": "Vy12345",
+      "error": {
+        "errorField": "toastify",
+        "errorMessage": "Invalid email or password"
+      }
+    },
+    {
+      "testName": "Invalid Email",
+      "email": "ngocmai197.com",
+      "password": "Ngocmai1907",
+      "error": {
+        "errorField": "email",
+        "errorMessage": "Please include an '@' in the email address."
+      }
+    },
+    {
+      "testName": "Invalid Email",
+      "email": "ngocmai197@gmail",
+      "password": "Ngocmai1907",
+      "error": {
+        "errorField": "email",
+        "errorMessage": "Please match the requested format."
+      }
+    },
+    {
+      "testName": "Invalid Email",
+      "email": "ngocmai197@",
+      "password": "Ngocmai1907",
+      "error": {
+        "errorField": "email",
+        "errorMessage": "Please enter a part following '@'."
+      }
+    }
+  ]
+}

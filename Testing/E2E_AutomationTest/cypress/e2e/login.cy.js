@@ -1,44 +1,52 @@
-import { loginPage } from "../pages/loginPage";
-import { profilePage } from "../pages/profilePage";
 import { navBar } from "../pages/navBar";
+import { loginPage } from "../pages/loginPage";
+
 
 describe("Sign In successfully", () => {
     beforeEach(() => {
-        cy.fixture("account").as("account");
-        cy.visit(Cypress.env("login"));
+        cy.fixture("signInData").as("data");
+        cy.visit(Cypress.env("home"));
+        navBar.clickSignIn();
+        cy.wait(500);
     });
 
-    it("Sign In with correct account", () => {
-        cy.get("@account").then((account) => {
+    it("Sign In with valid account", () => {
+        cy.get("@data").then((data) => {
             loginPage
-                .typeUsername(account.valid[0].email)
-                .typePassword(account.valid[0].password)
+                .inputSignIn(data.valid.email, data.valid.password)
                 .clickLogin();
 
-            navBar
-                .clickNavDropDown()
-                .clickUserProfile();
-
-            profilePage
-                .isEmailCorrect(account.valid[0].email);
+            navBar.isUserNameCorrect(data.valid.name);
         });
     });
 });
 
-describe("Can not sign in", () => {
+describe("Can not Sign In with invalid account", () => {
     beforeEach(() => {
-        cy.fixture("account").as("account");
-        cy.visit(Cypress.env("login"));
+        cy.fixture("signInData").as("data");
+        cy.visit(Cypress.env("home"));
+        navBar.clickSignIn();
+        cy.wait(500);
     });
 
-    it.only("Can not sign in", () => {
-        cy.get("@account").then((account) => {
+    const user = require('../fixtures/signInData.json');
+    const invalidAccount = user.invalid;
+
+    invalidAccount.forEach((data) => {
+        it(data.testName, () => {
             loginPage
-                .typeUsername(account.invalid[0].email)
-                .typePassword(account.invalid[0].password)
-                .clickLogin()
-                .isNotificationCorrect()
-                .clickCloseToastifyButton();
+                .inputSignIn(data.email, data.password)
+                .clickLogin();
+
+            if (data.error.errorField == "toastify") {
+                loginPage
+                    .isNotificationCorrect(data.error.errorMessage)
+                    .clickCloseToastifyButton();
+            }
+            else {
+                loginPage.checkErrorMessage(data.error.errorMessage, data.error.errorField);
+            }
+
         });
-    });
+    })
 });

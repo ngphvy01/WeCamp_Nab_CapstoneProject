@@ -12,6 +12,13 @@ export const productListPage = {
         return this;
     },
 
+    isOutOfStock(productName){
+        cy.get(this.BTN_PRODUCT).contains(productName).parent().siblings('button')
+        .should('have.text', 'Out of stock')
+        .should('be.disabled');
+        return this;
+    },
+
     addProductsToCart(products){
         for (let index = 0; index < products.length; index++) {
             const product = products[index];

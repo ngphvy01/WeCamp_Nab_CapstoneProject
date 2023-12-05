@@ -28,12 +28,45 @@ export const placeOrderPage = {
         return this;
     },
 
-    typeShippingInfo(fullname, address, city, postalCode, country) {
-        this.typeFullName(fullname);
-        this.typeAddress(address);
-        this.typeCity(city);
-        this.typePostalCode(postalCode);
-        this.typeCountry(country);
+    typeShippingInfo(order) {
+        if (order.fullName!=""){
+            this.typeFullName(order.fullName);
+        }
+        if(order.address!=""){
+            this.typeAddress(order.address);
+        }
+        if(order.city!=""){
+            this.typeCity(order.city);
+        }
+        if(order.postalCode!=""){
+            this.typePostalCode(order.postalCode);
+        }
+        if(order.country!=""){
+            this.typeCountry(order.country);
+        }
+        return this;
+    },
+
+    checkErrorMessage(error,field){
+        let check_field = this.TXT_FULLNAME;
+        
+        if (field == "address") {
+            check_field = this.TXT_ADDRESS;
+        }
+        else if (field == "city") {
+            check_field = this.TXT_CITY;
+        }
+        else if (field == "postalCode") {
+            check_field = this.TXT_POSTAL;
+        }
+        else if (field == "country") {
+            check_field = this.TXT_COUNTRY;
+        }
+
+        cy.get(check_field).then(($input) => {
+            expect($input[0].validationMessage).to.contains(error);
+        })
+        
         return this;
     },
 
@@ -129,11 +162,7 @@ export const placeOrderPage = {
     },
 
     inputOrder(order) {
-        this.typeShippingInfo(order.shippingAddress.fullName,
-            order.shippingAddress.address,
-            order.shippingAddress.city,
-            order.shippingAddress.postalCode,
-            order.shippingAddress.country)
+        this.typeShippingInfo(order.shippingAddress)
         this.clickBtnContinue()
         this.clickPayment(order.paymentMethod)
         this.clickBtnContinue()
